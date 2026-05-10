@@ -3,6 +3,112 @@ import { useState } from "react"
 function App() {
   const [currentPage, setCurrentPage] = useState("home")
 
+  // Recovery Page
+  if (currentPage === "recovery") {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <div className="w-full max-w-3xl bg-zinc-900 p-10 rounded-3xl border border-zinc-800">
+
+          <div className="mb-10">
+            <h1 className="text-5xl font-bold mb-3">
+              OneClick Recovery
+            </h1>
+
+            <p className="text-zinc-400">
+              Automated disaster recovery workflow execution
+            </p>
+          </div>
+
+          <div className="space-y-6">
+
+            <div className="bg-zinc-800 p-6 rounded-2xl flex justify-between items-center">
+              <div>
+                <h3 className="text-xl font-semibold">
+                  Validate Backups
+                </h3>
+
+                <p className="text-zinc-400 text-sm mt-1">
+                  Checking latest recovery points
+                </p>
+              </div>
+
+              <span className="text-green-400 font-semibold">
+                Completed
+              </span>
+            </div>
+
+            <div className="bg-zinc-800 p-6 rounded-2xl flex justify-between items-center">
+              <div>
+                <h3 className="text-xl font-semibold">
+                  Prepare DR Environment
+                </h3>
+
+                <p className="text-zinc-400 text-sm mt-1">
+                  Provisioning standby infrastructure
+                </p>
+              </div>
+
+              <span className="text-green-400 font-semibold">
+                Completed
+              </span>
+            </div>
+
+            <div className="bg-zinc-800 p-6 rounded-2xl flex justify-between items-center">
+              <div>
+                <h3 className="text-xl font-semibold">
+                  Restore Critical Services
+                </h3>
+
+                <p className="text-zinc-400 text-sm mt-1">
+                  Restoring production workloads
+                </p>
+              </div>
+
+              <span className="text-blue-400 font-semibold">
+                In Progress
+              </span>
+            </div>
+
+            <div className="bg-zinc-800 p-6 rounded-2xl flex justify-between items-center">
+              <div>
+                <h3 className="text-xl font-semibold">
+                  Health Verification
+                </h3>
+
+                <p className="text-zinc-400 text-sm mt-1">
+                  Running post-recovery validation
+                </p>
+              </div>
+
+              <span className="text-yellow-400 font-semibold">
+                Pending
+              </span>
+            </div>
+
+          </div>
+
+          <div className="mt-10 bg-green-500/10 border border-green-500/30 p-6 rounded-2xl">
+            <h3 className="text-2xl font-bold text-green-400 mb-2">
+              Estimated Recovery Time
+            </h3>
+
+            <p className="text-5xl font-bold">
+              18 mins
+            </p>
+          </div>
+
+          <button
+            onClick={() => setCurrentPage("dashboard")}
+            className="mt-10 w-full py-4 bg-blue-600 rounded-xl hover:bg-blue-500 transition font-semibold text-lg"
+          >
+            Back to Dashboard
+          </button>
+
+        </div>
+      </div>
+    )
+  }
+
   // Dashboard Page
   if (currentPage === "dashboard") {
     return (
