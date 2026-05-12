@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react"
+import { useEffect, useState, type ReactNode } from "react"
 
 type Page = "login" | "dashboard" | "upload" | "analyze" | "recovery" | "insights" | "settings"
 
@@ -111,6 +111,18 @@ function UploadPage({ setCurrentPage }: { setCurrentPage: (page: Page) => void }
 }
 
 function AnalyzePage({ setCurrentPage }: { setCurrentPage: (page: Page) => void }) {
+  const [isComplete, setIsComplete] = useState(false)
+
+  useEffect(() => {
+    const completeTimer = window.setTimeout(() => setIsComplete(true), 2200)
+    const redirectTimer = window.setTimeout(() => setCurrentPage("dashboard"), 3400)
+
+    return () => {
+      window.clearTimeout(completeTimer)
+      window.clearTimeout(redirectTimer)
+    }
+  }, [setCurrentPage])
+
   return (
     <div className="max-w-3xl mx-auto">
       <p className="text-blue-400 font-semibold mb-3">Demo Flow Step 2 / 3</p>
@@ -118,11 +130,15 @@ function AnalyzePage({ setCurrentPage }: { setCurrentPage: (page: Page) => void 
       <p className="text-zinc-400 mb-10 text-xl">OneClickDR is scanning resources, dependencies, and recovery readiness.</p>
       <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-10 space-y-8">
         <Progress label="Parsing infrastructure file" value="Completed" width="w-full" />
-        <Progress label="Checking IAM and exposure risks" value="Processing..." width="w-5/6" />
-        <Progress label="Evaluating RTO / RPO posture" value="Processing..." width="w-2/3" />
-        <Progress label="Generating AI recommendations" value="Pending" width="w-1/3" />
-        <div className="rounded-2xl border border-blue-600/40 bg-blue-600/10 p-5 text-blue-200">AI analysis is running in demo mode. Results are generated from a sample infrastructure risk model.</div>
-        <button onClick={() => setCurrentPage("dashboard")} className="w-full mt-8 py-5 bg-blue-600 rounded-2xl hover:bg-blue-500 transition text-2xl font-semibold">View Results</button>
+        <Progress label="Checking IAM and exposure risks" value={isComplete ? "Completed" : "Processing..."} width={isComplete ? "w-full" : "w-5/6"} />
+        <Progress label="Evaluating RTO / RPO posture" value={isComplete ? "Completed" : "Processing..."} width={isComplete ? "w-full" : "w-2/3"} />
+        <Progress label="Generating AI recommendations" value={isComplete ? "Completed" : "Finalizing..."} width={isComplete ? "w-full" : "w-1/3"} />
+        <div className={`rounded-2xl border p-5 transition ${isComplete ? "border-green-600/40 bg-green-600/10 text-green-200" : "border-blue-600/40 bg-blue-600/10 text-blue-200"}`}>
+          {isComplete ? "Analysis complete. Redirecting to the DR Dashboard..." : "AI analysis is running in demo mode. Results are generated from a sample infrastructure risk model."}
+        </div>
+        <button onClick={() => setCurrentPage("dashboard")} className="w-full mt-8 py-5 bg-blue-600 rounded-2xl hover:bg-blue-500 transition text-2xl font-semibold">
+          {isComplete ? "Open Results Now" : "View Results Now"}
+        </button>
       </div>
     </div>
   )
@@ -150,7 +166,7 @@ function Panel({ title, children }: { title: string; children: ReactNode }) {
 }
 
 function Progress({ label, value, width }: { label: string; value: string; width: string }) {
-  return <div><div className="flex justify-between mb-2 text-lg"><span>{label}</span><span className="text-zinc-400">{value}</span></div><div className="w-full h-4 bg-zinc-800 rounded-full"><div className={`${width} h-4 bg-blue-500 rounded-full`} /></div></div>
+  return <div><div className="flex justify-between mb-2 text-lg"><span>{label}</span><span className="text-zinc-400">{value}</span></div><div className="w-full h-4 bg-zinc-800 rounded-full"><div className={`${width} h-4 bg-blue-500 rounded-full transition-all duration-1000`} /></div></div>
 }
 
 function ActionRow({ action, priority, color }: { action: string; priority: string; color: string }) {
